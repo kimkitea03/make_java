@@ -1,0 +1,100 @@
+package com.itgroup.been;
+
+public class Member {
+    private String id;
+    private String name;
+    private String password;
+    private String gender;
+    private String brith;
+    private String marriage;
+    private int salary;
+    private String address;
+    private String manager;
+
+    public Member() {
+    }
+
+    public Member(String id, String name, String password, String gender, String brith, String marriage, int salary, String address, String manager) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.gender = gender;
+        this.brith = brith;
+        this.marriage = marriage;
+        this.salary = salary;
+        this.address = address;
+        this.manager = manager;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBrith() {
+        return brith;
+    }
+
+    public void setBrith(String brith) {
+        this.brith = brith;
+    }
+
+    public String getMarriage() {
+        return marriage;
+    }
+
+    public void setMarriage(String marriage) {
+        this.marriage = marriage;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+}
