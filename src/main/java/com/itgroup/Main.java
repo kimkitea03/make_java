@@ -11,7 +11,7 @@ public class Main {
 
         while (true){
             System.out.println("메뉴 선택");
-            System.out.println("0:종료, 1목록 조회, 2가입, 3수정, 4총회원수, 5탈퇴, 6회원정보, 7xx, 8xx,");
+            System.out.println("0:종료, 1목록 조회, 2가입, 3수정, 4총회원수, 5탈퇴, 6회원정보, 7성별조회, 8상세보기");
             int menu = scan.nextInt();//선택한 메뉴
             switch (menu){
                 case 0:
@@ -31,13 +31,16 @@ public class Main {
                     manager.getSize();
                     break;
                 case 5:
-
+                    manager.deleteData();
                     break;
                 case 6:
 
                     break;
                 case 7:
-
+                    manager.findByGender();
+                    break;
+                case 8 :
+                    manager.getMemberOne();
                     break;
             }
 
