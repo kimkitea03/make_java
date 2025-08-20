@@ -7,37 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 //데이터 베이스와 직접 연동하여 CRUD 작업을 수행해주는 DAO 클래스
-public class MemberDao {
+public class MemberDao extends superDao {
     public MemberDao() {
-        //해당 드라이버는 ojdbcDriver 클래스는 ojdbc.jar 파일에 포함되어 있는 자바 클래스 입니다.
-        String driver = "oracle.jdbc.driver.OracleDriver";
-        try {
-            Class.forName(driver);
-
-        } catch (ClassNotFoundException e) {//동적 객체 생성하는 문법입니다.
-            System.out.println("해당 드라이버가 존재하지 않습니다.");
-            e.printStackTrace();
-        }
+        
     }
-
-
-    public Connection getconnection(){
-        Connection conn= null;//접속 객체
-
-        String url= "jdbc:oracle:thin:@localhost:1521:xe";
-        String id = "oraman";
-        String passward = "oracle";
-
-
-        try {
-            conn = DriverManager.getConnection(url,id,passward);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return conn;
-    }
-
+    
     public int getsize() {
         String sql = "select count (*) as cut from members";
         PreparedStatement pstmt = null;
@@ -46,7 +20,7 @@ public class MemberDao {
 
         Connection conn = null; //접속 객체 구하기
         try {
-            conn = this.getconnection();
+            conn = super.getconnection();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
@@ -78,7 +52,7 @@ public class MemberDao {
 
 
         try{
-            conn = this.getconnection() ;
+            conn = super.getconnection() ;
             Pstmt= conn.prepareStatement(sql);
             rs = Pstmt.executeQuery();
 
@@ -129,7 +103,7 @@ public class MemberDao {
 
 
         try {
-            conn = this.getconnection();
+            conn = super.getconnection();
             pstmt=conn.prepareStatement(sql);
             pstmt.setString(1, gender);//첫번째 ?를 id로 치환해줘라는 구문
             rs=pstmt.executeQuery();
@@ -175,7 +149,7 @@ public class MemberDao {
         String sql = "select * from members where id = ?";//? 치환은 executeQuery 전에 치환해주면 된다.
 
         try{
-            conn = this.getconnection();
+            conn = super.getconnection();
             pstmt=conn.prepareStatement(sql);
 
             pstmt.setString(1, id);//첫번째 ?를 id로 치환해줘라는 구문
@@ -188,7 +162,7 @@ public class MemberDao {
                 bean.setName(rs.getString("name"));
                 bean.setPassword(rs.getString("password"));
                 bean.setGender(rs.getString("gender"));
-                bean.setBrith(rs.getString("birth"));
+                bean.setBrith(String.valueOf(rs.getDate("birth")));
                 bean.setMarriage(rs.getString("marriage"));
                 bean.setSalary(rs.getInt("salary"));
                 bean.setAddress(rs.getString("address"));
@@ -217,7 +191,7 @@ public class MemberDao {
 
 
         try{
-            conn=this.getconnection();
+            conn=super.getconnection();
             pstmt =conn.prepareStatement(sql);
             pstmt.setString(1,id);
 
@@ -241,6 +215,94 @@ public class MemberDao {
             }
 
         }
+        return cnt;
+    }
+
+    public int insertData(Member bean) {
+        int cnt = -1;
+
+        String sql = "insert into members(id, name, password, gender, birth, marriage, salary, address, manager)";
+        sql +="values(?,?,?,?,?,?,?,?,?)";
+        Connection conn = null;
+        PreparedStatement  pstmt = null;
+
+        try{
+            conn = super.getconnection();
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, bean.getId());
+            pstmt.setString(2, bean.getName());
+            pstmt.setString(3, bean.getPassword());
+            pstmt.setString(4, bean.getGender());
+            pstmt.setString(5, bean.getBrith());
+            pstmt.setString(6, bean.getMarriage());
+            pstmt.setInt(7, bean.getSalary());
+            pstmt.setString(8, bean.getAddress());
+            pstmt.setString(9, bean.getManager());
+            cnt = pstmt.executeUpdate();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try{
+                conn.rollback();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }finally {
+            try{
+                if(pstmt != null){pstmt.close();}
+                if(conn != null){conn.close();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return cnt;
+    }
+
+
+    public int updateData(Member bean) {
+        //수정된 나의 정보 bean을 사용하여 데이터 베이스에 수정합니다.
+        int cnt = -1;
+
+        String sql = "update members set name = ?,password = ?, gender = ?, birth = ?,marriage = ?, salary = ?,address = ?, manager = ? ";
+        sql += " where id = ? ";
+        Connection conn = null;
+        PreparedStatement  pstmt = null;
+
+        try{
+            conn = super.getconnection();
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, bean.getName());
+            pstmt.setString(2, bean.getPassword());
+            pstmt.setString(3, bean.getGender());
+            pstmt.setString(4, bean.getBrith());
+            pstmt.setString(5, bean.getMarriage());
+            pstmt.setInt(6, bean.getSalary());
+            pstmt.setString(7, bean.getAddress());
+            pstmt.setString(8, bean.getManager());
+            pstmt.setString(9, bean.getId());
+            cnt = pstmt.executeUpdate();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try{
+                conn.rollback();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }finally {
+            try{
+                if(pstmt != null){pstmt.close();}
+                if(conn != null){conn.close();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
         return cnt;
     }
 }
